@@ -6,13 +6,13 @@ import { handlerReadiness, handlerMetrics, handlerResetMetrics } from "./api/rea
 const app = express();
 const PORT = 8080;
 
-app.use("/app", express.static("./src/app"));
 app.use(middlewareLogResponse);  
-app.use(middlewareMetricsInc);
-app.get("/reset", handlerResetMetrics);
+app.use("/app", middlewareMetricsInc, express.static("./src/app"));
 
-app.get("/metrics", handlerMetrics);
-app.get("/healthz", handlerReadiness);
+app.get("/api/healthz", handlerReadiness);
+app.get("/admin/metrics", handlerMetrics);
+app.get("/admin/reset", handlerResetMetrics);
+
 
 app.listen(PORT, () => {
   console.log(`Server is running at http://localhost:${PORT}`);
